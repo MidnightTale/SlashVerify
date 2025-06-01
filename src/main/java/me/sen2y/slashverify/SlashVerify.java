@@ -9,10 +9,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.Optio
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public final class SlashVerify extends JavaPlugin implements SlashCommandProvider {
 
@@ -26,9 +23,9 @@ public final class SlashVerify extends JavaPlugin implements SlashCommandProvide
 
     @Override
     public Set<PluginSlashCommand> getSlashCommands() {
-        return new HashSet<>(Arrays.asList(
-                new PluginSlashCommand(this, new CommandData(alias, this.getConfig().getString("command-description"))
-                        .addOption(OptionType.STRING, this.getConfig().getString("code-option-name"), this.getConfig().getString("code-option-description"), true))
+        return new HashSet<>(Collections.singletonList(
+                new PluginSlashCommand(this, new CommandData(alias, Objects.requireNonNull(this.getConfig().getString("command-description")))
+                        .addOption(OptionType.STRING, Objects.requireNonNull(this.getConfig().getString("code-option-name")), Objects.requireNonNull(this.getConfig().getString("code-option-description")), true))
         ));
     }
 
