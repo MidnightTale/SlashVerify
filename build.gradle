@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2' // For fat JARs
+}
+
+group = 'me.sen2y'
+version = '1.0-SNAPSHOT' // Will be replaced by project.version from plugin.yml later if possible
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://papermc.io/repo/repository/maven-public/' }
+    maven { url = 'https://repo.scarsz.me/snapshots' } // DiscordSRV
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT' // Paper API for 1.21
+    compileOnly 'com.discordsrv:discordsrv-api:2.0.0-SNAPSHOT' // DiscordSRV API
+    // Using the latest SNAPSHOT for DiscordSRV API as an example, adjust if a stable version is preferred
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+shadowJar {
+    archiveClassifier.set('') // Produce a normal JAR name (e.g., SlashVerify-1.0.jar)
+    relocate 'github.scarsz.discordsrv.dependencies', 'me.sen2y.slashverify.libs.discordsrvdeps'
+    // Relocating JDA dependencies that DiscordSRV shades to avoid conflicts if other plugins use different JDA versions.
+    // The path 'me.sen2y.slashverify.libs.discordsrvdeps' is an example; choose a unique path.
+}
+
+processResources {
+    filesMatching('plugin.yml') {
+        expand project.properties
+    }
+}
+
+// Ensure shadowJar runs when building
+tasks.build.dependsOn(shadowJar)

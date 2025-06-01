@@ -3,4 +3,8 @@ command-description: "Verify your Discord account"
 code-option-name: "code" # Must be lowercase, will be turned into lowercase anyway.
 code-option-description: "4 digits code you received in-game"
 ephemeral-reply: true # Should the bot reply be ephemeral?
+verification-success-message: "Congratulations {user}! You have successfully verified with code {code}."
+code-minimum-length: 6
+code-regex-pattern: "^[a-zA-Z0-9]+$" # Example: Alphanumeric only
+invalid-code-message: "The code you provided is invalid. Reason: {reason}"
 # There is no reload option, you will need to restart your server.
